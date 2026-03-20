@@ -1,0 +1,403 @@
+/* ============================================================
+   GIGOSHIELD — pages.css
+   Page-specific component styles: landing hero, weather
+   cards, fraud arena, onboarding steps, policy card, etc.
+   ============================================================ */
+
+/* ── LANDING PAGE ────────────────────────────────────────── */
+.hero-section {
+  padding: 48px 0;
+  text-align: center;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: var(--cyan-dim);
+  border: 1px solid rgba(6,182,212,0.3);
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--cyan);
+  letter-spacing: 0.1em;
+  margin-bottom: 24px;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 3.2rem;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--text), var(--cyan), var(--violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-sub {
+  font-size: 1rem;
+  color: var(--text-sec);
+  max-width: 560px;
+  margin: 0 auto 32px;
+  line-height: 1.7;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 48px;
+}
+
+.feature-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+}
+.feature-card:hover {
+  border-color: var(--cyan);
+  transform: translateY(-2px);
+}
+
+.feature-icon  { font-size: 1.8rem; margin-bottom: 12px; }
+.feature-title { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; margin-bottom: 6px; }
+.feature-desc  { font-size: 0.78rem; color: var(--text-sec); line-height: 1.6; }
+
+/* ── TRIGGER TABLE ───────────────────────────────────────── */
+.trigger-table { width: 100%; }
+
+.trigger-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.trigger-row:last-child { border-bottom: none; }
+
+.trigger-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.trigger-info   { flex: 1; }
+.trigger-name   { font-size: 0.82rem; font-weight: 600; }
+.trigger-thresh { font-size: 0.7rem; color: var(--text-sec); font-family: var(--font-mono); margin-top: 2px; }
+.trigger-value  { font-family: var(--font-display); font-weight: 700; font-size: 1rem; }
+
+/* ── WEATHER CITY GRID ───────────────────────────────────── */
+.city-weather-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+@media (max-width: 1000px) {
+  .city-weather-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.city-weather-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.city-weather-card:hover          { border-color: var(--border2); }
+.city-weather-card.trigger-active { border-color: rgba(239,68,68,0.4); background: rgba(239,68,68,0.04); }
+
+.cwc-name {
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--text-sec);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.cwc-temp {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+.cwc-details {
+  font-size: 0.7rem;
+  color: var(--text-sec);
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── INDIA MAP ───────────────────────────────────────────── */
+#weather-map-container {
+  background: var(--surface2);
+  border-radius: var(--radius);
+  overflow: hidden;
+  position: relative;
+  height: 340px;
+}
+
+.india-map-wrap          { position: relative; width: 100%; height: 100%; }
+.india-map-wrap svg      { width: 100%; height: 100%; }
+
+.city-dot {
+  position: absolute;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.city-dot:hover { transform: translate(-50%, -50%) scale(1.8); }
+
+/* Tooltip via pseudo-element */
+.city-dot::after {
+  content: attr(data-city);
+  position: absolute;
+  top: -22px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.6rem;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+  background: rgba(0,0,0,0.8);
+  padding: 2px 6px;
+  border-radius: 3px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+.city-dot:hover::after { opacity: 1; }
+
+/* ── FRAUD ARENA ─────────────────────────────────────────── */
+.fraud-arena {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 5px;
+  padding: 16px;
+  background: rgba(0,0,0,0.3);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+}
+
+.arena-node {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 2px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  font-family: var(--font-mono);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.arena-node.genuine { background: rgba(16,185,129,0.2);  border-color: var(--green);  color: var(--green);  }
+.arena-node.fraud   { background: rgba(239,68,68,0.2);   border-color: var(--red);    color: var(--red);    }
+.arena-node.flagged { background: rgba(245,158,11,0.2);  border-color: var(--amber);  color: var(--amber);  animation: flicker 0.5s infinite alternate; }
+.arena-node.paid    { background: rgba(6,182,212,0.2);   border-color: var(--cyan);   color: var(--cyan);   }
+
+/* ── ONBOARDING STEPS ────────────────────────────────────── */
+.step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+
+.si-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.si-num {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--surface2);
+  border: 2px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--text-sec);
+  transition: all 0.3s;
+}
+
+.si-step.active .si-num,
+.si-step.done .si-num {
+  background: linear-gradient(135deg, var(--cyan), var(--violet));
+  border-color: transparent;
+  color: #fff;
+}
+
+.si-label { font-size: 0.65rem; color: var(--text-muted); font-family: var(--font-mono); }
+.si-step.active .si-label { color: var(--cyan); }
+
+.si-line {
+  flex: 1;
+  height: 2px;
+  background: var(--border2);
+  min-width: 60px;
+  transition: background 0.3s;
+}
+.si-line.done { background: var(--cyan); }
+
+.onboard-step        { display: none; }
+.onboard-step.active { display: block; }
+
+/* ── PLATFORM SELECTOR GRID ──────────────────────────────── */
+.platform-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.platform-card {
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+.platform-card:hover,
+.platform-card.selected {
+  border-color: var(--cyan);
+  background: var(--cyan-dim);
+  color: var(--cyan);
+}
+
+/* ── PLAN CARDS ──────────────────────────────────────────── */
+.plan-card {
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.plan-card:hover,
+.plan-card.selected {
+  border-color: var(--cyan);
+  background: rgba(6,182,212,0.05);
+}
+.plan-card.selected::after {
+  content: '✓';
+  position: absolute;
+  top: 12px; right: 12px;
+  width: 22px; height: 22px;
+  background: var(--cyan);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ── POLICY HERO CARD ────────────────────────────────────── */
+.policy-hero {
+  background: linear-gradient(135deg, rgba(6,182,212,0.1), rgba(139,92,246,0.1));
+  border: 1px solid rgba(6,182,212,0.2);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.policy-hero::before {
+  content: '⬡';
+  position: absolute;
+  right: -10px; top: -20px;
+  font-size: 8rem;
+  opacity: 0.04;
+  font-family: var(--font-mono);
+  color: var(--cyan);
+  pointer-events: none;
+}
+
+/* ── AUDIT TRAIL ─────────────────────────────────────────── */
+.audit-trail { display: flex; flex-direction: column; }
+
+.audit-step {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+  position: relative;
+}
+.audit-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 15px; top: 36px;
+  width: 2px;
+  height: calc(100% - 12px);
+  background: var(--border);
+}
+
+.audit-dot {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.65rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  border: 2px solid;
+  z-index: 1;
+}
+.audit-dot.done    { background: var(--green-dim); border-color: var(--green); color: var(--green); }
+.audit-dot.active  { background: var(--cyan-dim);  border-color: var(--cyan);  color: var(--cyan);  animation: pulse 1.5s infinite; }
+.audit-dot.pending { background: var(--surface2);  border-color: var(--border2); color: var(--text-muted); }
+
+.audit-content  { flex: 1; padding-top: 4px; }
+.audit-label    { font-size: 0.8rem; font-weight: 600; }
+.audit-detail   { font-size: 0.72rem; color: var(--text-sec); margin-top: 2px; font-family: var(--font-mono); }
+
+/* ── ADMIN GRID & THRESHOLD ──────────────────────────────── */
+.admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+.threshold-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.threshold-item:last-child { border-bottom: none; }
+.threshold-name { font-size: 0.82rem; font-weight: 500; }
+.threshold-unit { font-size: 0.7rem; color: var(--text-sec); font-family: var(--font-mono); }
+
+.threshold-input {
+  width: 80px;
+  text-align: center;
+  padding: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}

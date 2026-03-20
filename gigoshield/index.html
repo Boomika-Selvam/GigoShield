@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⬡ GigoShield — AI Parametric Insurance for India's Gig Economy</title>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- Third-party libraries -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+<!-- App Styles -->
+<link rel="stylesheet" href="src/styles/tokens.css">
+<link rel="stylesheet" href="src/styles/layout.css">
+<link rel="stylesheet" href="src/styles/components.css">
+<link rel="stylesheet" href="src/styles/pages.css">
+</head>
+<body>
+
+<!-- ── SIDEBAR ─────────────────────────────────────────── -->
+<nav id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-hex">⬡</div>
+    <div>
+      <div class="logo-text">GigoShield</div>
+      <div class="logo-sub">DEVTrails 2026</div>
+    </div>
+  </div>
+
+  <div class="sidebar-section">Platform</div>
+  <a class="nav-item active" data-page="landing" onclick="navigate('landing')">
+    <i data-lucide="home"></i> Overview
+  </a>
+  <a class="nav-item" data-page="dashboard" onclick="navigate('dashboard')">
+    <i data-lucide="layout-dashboard"></i> Dashboard
+  </a>
+  <a class="nav-item" data-page="weather" onclick="navigate('weather')">
+    <i data-lucide="cloud-rain"></i> Weather Monitor
+  </a>
+
+  <div class="sidebar-section">Workers</div>
+  <a class="nav-item" data-page="onboarding" onclick="navigate('onboarding')">
+    <i data-lucide="user-plus"></i> Registration
+  </a>
+  <a class="nav-item" data-page="policy" onclick="navigate('policy')">
+    <i data-lucide="shield-check"></i> My Policy
+  </a>
+  <a class="nav-item" data-page="claims" onclick="navigate('claims')">
+    <i data-lucide="zap"></i> Claims
+    <span class="nav-badge" id="claimsCount">0</span>
+  </a>
+
+  <div class="sidebar-section">Intelligence</div>
+  <a class="nav-item" data-page="fraud" onclick="navigate('fraud')">
+    <i data-lucide="scan-search"></i> Fraud Detector
+  </a>
+  <a class="nav-item" data-page="analytics" onclick="navigate('analytics')">
+    <i data-lucide="bar-chart-2"></i> Analytics
+  </a>
+  <a class="nav-item" data-page="admin" onclick="navigate('admin')">
+    <i data-lucide="settings-2"></i> Admin Panel
+  </a>
+
+  <div class="sidebar-footer">
+    <div class="live-indicator">
+      <div class="pulse-dot"></div>
+      <span id="liveStatus">Open-Meteo · Live</span>
+    </div>
+    <div class="last-refresh" id="lastRefresh">Refreshing...</div>
+  </div>
+</nav>
+
+<!-- ── TOPBAR ──────────────────────────────────────────── -->
+<header id="topbar">
+  <div class="topbar-left">
+    <div class="breadcrumb">GigoShield / <span id="breadcrumbPage">Overview</span></div>
+    <div class="live-dot" id="topbarLive">LIVE</div>
+  </div>
+  <div class="topbar-right">
+    <select class="city-select" id="globalCitySelect" onchange="onCityChange(this.value)">
+      <option value="mumbai">🏙️ Mumbai</option>
+      <option value="delhi">🏙️ Delhi NCR</option>
+      <option value="bangalore">🏙️ Bengaluru</option>
+      <option value="chennai">🏙️ Chennai</option>
+      <option value="hyderabad">🏙️ Hyderabad</option>
+      <option value="kolkata">🏙️ Kolkata</option>
+      <option value="pune">🏙️ Pune</option>
+    </select>
+    <button class="btn btn-ghost btn-sm" onclick="refreshWeather()">
+      <i data-lucide="refresh-cw"></i> Refresh
+    </button>
+    <button class="btn btn-ghost btn-sm" onclick="openAIPanel()" title="AI Assistant">
+      <i data-lucide="sparkles"></i> AI
+    </button>
+  </div>
+</header>
+
+<!-- ── MAIN CONTENT ────────────────────────────────────── -->
+<main id="main">
+  <div id="page-content"></div>
+</main>
+
+<!-- ── AI SIDE PANEL ───────────────────────────────────── -->
+<div id="ai-panel">
+  <div class="ai-panel-header">
+    <div>
+      <div class="ai-panel-title">✨ Gemini AI Assistant</div>
+      <div class="ai-panel-sub">Ask about claims, weather risk, or fraud patterns</div>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="closeAIPanel()">
+      <i data-lucide="x"></i>
+    </button>
+  </div>
+  <div class="ai-chat-area" id="aiChatArea">
+    <div class="ai-msg bot">
+      👋 Hi! I'm your GigoShield AI assistant powered by Gemini. Ask me about:
+      <div class="ai-chips">
+        <span class="ai-chip" onclick="askAI('Analyze current weather risk for Mumbai')">🌧️ Weather risk</span>
+        <span class="ai-chip" onclick="askAI('Explain how trust scores prevent fraud')">🛡️ Trust scores</span>
+        <span class="ai-chip" onclick="askAI('What premium should a Swiggy rider in Chennai pay?')">💰 Premium calc</span>
+        <span class="ai-chip" onclick="askAI('Summarize today claims performance')">📊 Claims summary</span>
+      </div>
+    </div>
+  </div>
+  <div class="ai-input-area">
+    <input type="text" id="aiInput" placeholder="Ask anything..." onkeydown="if(event.key==='Enter')sendAIMsg()">
+    <button class="btn btn-primary btn-sm" onclick="sendAIMsg()">
+      <i data-lucide="send"></i>
+    </button>
+  </div>
+</div>
+
+<!-- AI Floating Button -->
+<button id="ai-toggle" onclick="toggleAIPanel()" title="AI Assistant">
+  <i data-lucide="sparkles"></i>
+</button>
+
+<!-- ── TOAST CONTAINER ─────────────────────────────────── -->
+<div id="toast-container"></div>
+
+<!-- ── GEMINI KEY MODAL ────────────────────────────────── -->
+<div class="modal-overlay" id="geminiModal" style="display:none">
+  <div class="modal">
+    <div class="modal-title">✨ Configure Gemini AI</div>
+    <div class="modal-sub">Enter your Gemini Flash 2.5 API key to enable the AI assistant, natural language claim analysis, and risk insights.</div>
+    <div class="form-group">
+      <label class="form-label">Gemini API Key</label>
+      <input type="password" id="geminiKeyInput" placeholder="AIza..." autocomplete="off">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost btn-sm" onclick="closeGeminiModal()">Skip</button>
+      <button class="btn btn-primary" onclick="saveGeminiKey()">
+        <i data-lucide="key"></i> Save & Enable AI
+      </button>
+    </div>
+    <div class="modal-note">Key stored in memory only · Not sent to any third-party server</div>
+  </div>
+</div>
+
+<!-- ── APP SCRIPTS ─────────────────────────────────────── -->
+<script src="src/store/store.js"></script>
+<script src="src/services/weather.js"></script>
+<script src="src/services/engine.js"></script>
+<script src="src/services/ai.js"></script>
+<script src="src/services/utils.js"></script>
+<script src="src/pages/landing.js"></script>
+<script src="src/pages/dashboard.js"></script>
+<script src="src/pages/weather-page.js"></script>
+<script src="src/pages/onboarding.js"></script>
+<script src="src/pages/policy.js"></script>
+<script src="src/pages/claims.js"></script>
+<script src="src/pages/fraud.js"></script>
+<script src="src/pages/analytics.js"></script>
+<script src="src/pages/admin.js"></script>
+<script src="src/app.js"></script>
+</body>
+</html>
